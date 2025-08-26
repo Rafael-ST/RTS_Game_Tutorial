@@ -61,6 +61,7 @@ public class UnitSelectionManager : MonoBehaviour
         }
 
 
+
         if (Input.GetMouseButtonDown(1) && unitsSelected.Count > 0)
         {
             RaycastHit hit;
@@ -82,23 +83,20 @@ public class UnitSelectionManager : MonoBehaviour
         if(unitsSelected.Contains(unit) == false)
         {
             unitsSelected.Add(unit);
-            TriggerSelectionIndicator(unit, true);
-            EnableUnitMovement(unit, true);
+            SelectUnit(unit, true);
         } 
         else
         {
-            EnableUnitMovement(unit, false);
-            TriggerSelectionIndicator(unit, false);
+            SelectUnit(unit, false);
             unitsSelected.Remove(unit);
         }
     }
 
-    private void DeselectAll()
+    public void DeselectAll()
     {
         foreach(var unit in unitsSelected)
         {
-            EnableUnitMovement(unit, false);
-            TriggerSelectionIndicator(unit, false);
+            SelectUnit(unit, false);
 
         }
 
@@ -112,9 +110,7 @@ public class UnitSelectionManager : MonoBehaviour
         DeselectAll();
 
         unitsSelected.Add(unit);
-        TriggerSelectionIndicator(unit, true);
-
-        EnableUnitMovement(unit, true);
+        SelectUnit(unit, true);
     }
 
     private void EnableUnitMovement(GameObject unit, bool shouldMove)
@@ -127,4 +123,18 @@ public class UnitSelectionManager : MonoBehaviour
         unit.transform.GetChild(0).gameObject.SetActive(isVisible);
     }
 
+    internal void DragSelect(GameObject unit)
+    {
+        if (unitsSelected.Contains(unit) == false)
+        {
+            unitsSelected.Add(unit);
+            SelectUnit(unit, true);
+        }
+    }
+
+    private void SelectUnit(GameObject unit, bool isSelected)
+    {
+        TriggerSelectionIndicator(unit, isSelected);
+        EnableUnitMovement(unit, isSelected);
+    }
 }
